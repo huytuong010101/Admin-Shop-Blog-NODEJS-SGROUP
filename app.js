@@ -18,7 +18,7 @@ const options = {
 	port: process.env.DB_PORT,
 	user: process.env.DB_USER,
 	password: process.env.DB_PASS,
-	database: 'session'
+	database: 'admin'
 };
 const sessionStore = new MySQLStore(options);
 app.set('trust proxy', 1) // trust first proxy
