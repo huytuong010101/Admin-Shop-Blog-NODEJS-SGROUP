@@ -1,11 +1,10 @@
 {
     "env": {
-        "commonjs": true,
         "es6": true,
         "node": true
     },
     "extends": [
-        "eslint:recommended"
+        "google"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -23,7 +22,5 @@
         "dot-notation": 0,
         "default-case": 0
     }
+
 }
-
-
-

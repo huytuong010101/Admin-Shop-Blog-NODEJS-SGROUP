@@ -7,24 +7,26 @@ const session = require('express-session')
 const MySQLStore = require('express-mysql-session')(session);
 const Index = require('./routes/Index');
 const User = require('./routes/User');
+const methodOverride = require('method-override')
 
 require('dotenv').config()
 
 const app = express();
-// sesstion
+// overriding maethos
+	app.use(methodOverride('_method'))
 //section setting
 const options = {
 	host: process.env.DB_HOST,
 	port: process.env.DB_PORT,
 	user: process.env.DB_USER,
 	password: process.env.DB_PASS,
-	database: 'admin'
+	database: process.env.DB_NAME,
 };
 const sessionStore = new MySQLStore(options);
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({
-  key: 'session_cookie_name',
-	secret: 'session_cookie_secret',
+	key: process.env.SESSION_KEY,
+	secret: process.env.SESSION_SECRET,
 	store: sessionStore,
 	resave: false,
 	saveUninitialized: false
@@ -39,23 +41,23 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use('/', Index);
-app.use('/user', User);
+app.use('/admin/view', Index);
+app.use('/admin/user', User);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+	next(createError(404));
 });
 
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+	res.locals.message = err.message;
+	res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+	res.status(err.status || 500);
+	res.render('error');
 });
 
 module.exports = app;
