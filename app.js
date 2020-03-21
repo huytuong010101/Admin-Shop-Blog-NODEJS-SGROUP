@@ -3,18 +3,18 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const session = require('express-session')
+const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const Index = require('./routes/Index');
 const User = require('./routes/User');
-const methodOverride = require('method-override')
+const methodOverride = require('method-override');
 
 require('dotenv').config()
 
 const app = express();
 // overriding maethos
-	app.use(methodOverride('_method'))
-//section setting
+	app.use(methodOverride('_method'));
+// section setting
 const options = {
 	host: process.env.DB_HOST,
 	port: process.env.DB_PORT,
@@ -23,20 +23,20 @@ const options = {
 	database: process.env.DB_NAME,
 };
 const sessionStore = new MySQLStore(options);
-app.set('trust proxy', 1) // trust first proxy
+app.set('trust proxy', 1);// trust first proxy
 app.use(session({
 	key: process.env.SESSION_KEY,
 	secret: process.env.SESSION_SECRET,
 	store: sessionStore,
 	resave: false,
-	saveUninitialized: false
+	saveUninitialized: false,
 }))
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', "ejs");
+app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

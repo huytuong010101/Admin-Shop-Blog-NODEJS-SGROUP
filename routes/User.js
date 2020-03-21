@@ -7,7 +7,7 @@ const someOtherPlaintextPassword = 'not_bacon';
 const salt = bcrypt.genSaltSync(saltRounds);
 require('dotenv').config()
 
-//database setting
+// database setting
 const knex = require('knex')({
     client: 'mysql',
     connection: {
@@ -15,36 +15,36 @@ const knex = require('knex')({
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
         database: process.env.DB_NAME,
-        port: process.env.DB_PORT
-    }
+        port: process.env.DB_PORT,
+    },
 });
 
 /* GET users listing. */
 router.get('/login', function (req, res, next) {
     if (req.session.user){
-        return res.redirect("/admin/view")
+        return res.redirect('/admin/view');
     }
-    return res.render("login",{"note": ""});
+    return res.render('login',{'note': ''});
 });
 router.get('/logout', function (req, res, next) {
     req.session.destroy()
-    return res.redirect("login")
+    return res.redirect('login')
 });
 
 router.post('/login', function (req, res, next) {
     username = req.body.username
     password = req.body.password
 
-    knex.from('users').select("*").where('username', '=', username)
+    knex.from('users').select('*').where('username', '=', username)
     .then((rows) => {
         if (rows.length == 0){
-            return res.render("login",{"note": "Username or password is wrong"});
+            return res.render('login',{'note': 'Username or password is wrong'});
         }
         if (!bcrypt.compareSync(password, rows[0].password)){
-            return res.render("login",{"note": "Username or password is wrong"});
+            return res.render('login',{'note': 'Username or password is wrong'});
         }
-        req.session["user"] = username
-        return res.redirect("/admin/view");
+        req.session['user'] = username
+        return res.redirect('/admin/view');
         
     })
     .catch((err) => { console.log( err); throw err })
@@ -55,7 +55,7 @@ router.post('/login', function (req, res, next) {
 });
 
 router.get('/register', function (req, res, next) {
-    return res.render("register", {"note": ""});
+    return res.render('register', {'note': ''});
 });
 
 router.post('/register', function (req, res, next) {
@@ -65,24 +65,24 @@ router.post('/register', function (req, res, next) {
     email = req.body.email
     fullname = req.body.fullname
     //check if user exist
-    knex.from('users').select("username").where('username', '=', username)
+    knex.from('users').select('username').where('username', '=', username)
     .then((rows) => {
         if (rows.length != 0){
-            return res.render("register",{"note": "Username is exist"});
+            return res.render('register',{'note': 'Username is exist'});
         }
         knex('users').insert({
-            "username": username,
-            "password": password,
-            "fullname": fullname,
-            "email": email
+            'username': username,
+            'password': password,
+            'fullname': fullname,
+            'email': email
         })
         .then(() => {
-            return res.redirect("login")
+            return res.redirect('login')
         })
         .catch((err) => { console.log( err); throw err })
 
     })
-    .catch((err) => { console.log( err); throw err })
+    .catch((err) => { console.log( err); throw err;})
     .finally(() => {
         //knex.destroy();
     });

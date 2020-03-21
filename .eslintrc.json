@@ -1,10 +1,11 @@
 {
     "env": {
+        "commonjs": true,
         "es6": true,
         "node": true
     },
     "extends": [
-        "google"
+        "airbnb-base"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -22,5 +23,4 @@
         "dot-notation": 0,
         "default-case": 0
     }
-
 }
