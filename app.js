@@ -5,15 +5,14 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
-const Index = require('./routes/Index');
-const User = require('./routes/User');
+const Admin = require('./routes/Admin');
 const methodOverride = require('method-override');
-
+var flash = require('connect-flash-plus');
 require('dotenv').config()
 
 const app = express();
 // overriding maethos
-	app.use(methodOverride('_method'));
+app.use(methodOverride('_method'));
 // section setting
 const options = {
 	host: process.env.DB_HOST,
@@ -31,6 +30,7 @@ app.use(session({
 	resave: false,
 	saveUninitialized: false,
 }))
+app.use(flash());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -40,9 +40,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-app.use('/admin/view', Index);
-app.use('/admin/user', User);
+app.use('/admin', Admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
