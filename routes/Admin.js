@@ -1,69 +1,39 @@
 const express = require('express');
 const router = express.Router();
 const { isAuth, isNotAuth } = require("../app/admin/authMiddlewares")
-const handle = require("../app/admin/controllers")
-const { check, validationResult } = require('express-validator');
-const { UserIsNotExist, EmailIsNotExist, EmailIsNotExistUpdate} = require("../validate/userValidate")
+const userHandle = require("../app/admin/userControllers")
+const authHandle = require("../app/admin/authControllers")
+const productHandle = require("../app/admin/productControllers")
+const { updateUserValidate, registerValidate, } = require("../validate/userValidate")
+const { TypeValidate, updateTypeValidate, } = require("../validate/productValidate")
 
 /* GET users listing. */
 //home page
-router.get('', isAuth, handle.homePage);
+router.get('', isAuth, userHandle.homePage);
 //auth
-router.get('/user/login', isNotAuth, handle.getLogin);
-router.get('/user/logout', handle.getLogout);
-router.post('/user/login', handle.postLogin);
-router.get('/user/register', handle.getRegister);
-router.post('/user/register', [
-    check('email', 'Your email is not valid').not().isEmpty().isEmail().normalizeEmail(),
-    check('username').not().isEmpty().isLength({min: 5}).withMessage('username must have more than 5 characters'),
-    check('fullname').not().isEmpty().withMessage('Full name not empty'),
-    check('password', 'Your password must be at least 5 characters').not().isEmpty().isLength({min: 5}),
-    check('username').custom(
-        (value) => {
-            return UserIsNotExist(value).then((value) => {
-                if (value == false) return Promise.reject("Username is exist")
-            })   
-        }
-    ),
-    check('email').custom(
-        (value) => {
-            return EmailIsNotExist(value).then((value) => {
-                if (value == false) return Promise.reject("Email is exist")
-            })
-        }
-    ),
-], handle.postRegister);
+router.get('/user/login', isNotAuth, authHandle.getLogin);
+router.get('/user/logout', authHandle.getLogout);
+router.post('/user/login', authHandle.postLogin);
+router.get('/user/register', userHandle.getRegister);
+router.post('/user/register', registerValidate, userHandle.postRegister);
 //view
-router.get('/view/listuser', isAuth, handle.renderListUser);
-router.put('/view/edit',[
-    check('email', 'Your email is not valid').not().isEmpty().isEmail().normalizeEmail(),
-    check('password', 'Your password must be at least 5 characters').not().isEmpty().isLength({min: 5}),
-    check('email').custom(
-        (value, {req}) => {
-            return EmailIsNotExistUpdate(value, req.body.username).then((value) => {
-                if (value == false) return Promise.reject("Email is exist")
-            })
-        }
-    ),
-], isAuth, handle.updateProfile);
-router.delete('/view/delete', isAuth, handle.deleteUser);
+router.get('/view/listuser', isAuth, userHandle.renderListUser);
+router.put('/view/edit',updateUserValidate , isAuth, userHandle.updateProfile);
+router.delete('/view/delete', isAuth, userHandle.deleteUser);
+router.get('/view/detail/:id', isAuth, userHandle.detailUser);
+router.get('/view/products', isAuth, productHandle.getProducts);
+router.post('/addnewtype', isAuth, TypeValidate, productHandle.addNewType);
+router.delete('/deletetype', isAuth, productHandle.deleteType);
+router.post('/addnewproduct', isAuth, productHandle.addNewProduct);
+router.delete('/deleteproduct', isAuth, productHandle.deleteProduct);
+router.post('/detailtype', isAuth, productHandle.detailType);
+router.put('/updatetype', isAuth,updateTypeValidate, productHandle.updateType);
+router.post('/detailproduct', isAuth, productHandle.detailProduct);
+router.put('/updateproduct', isAuth,updateTypeValidate, productHandle.updateProduct);
 
-router.get('/view/detail/:id', isAuth, handle.detailUser);
+
+
 // view not use
-router.get('/view/blank', isAuth, function (req, res, next) {
-    return res.render("blank", { "user": req.session.user });
-});
-router.get('/view/dashboard', isAuth, function (req, res, next) {
-    return res.render("dashboard", { "user": req.session.user });
-});
-router.get('/view/map-google', isAuth, function (req, res, next) {
-    return res.render("map-google", { "user": req.session.user });
-});
-router.get('/view/profile', isAuth, function (req, res, next) {
-    return res.render("profile", { "user": req.session.user });
-});
-router.get('/view/themifyicon', isAuth, function (req, res, next) {
-    return res.render("themifyicon", { "user": req.session.user });
-});
+
 
 module.exports = router;

@@ -7,26 +7,8 @@ require('dotenv').config()
 
 // database setting
 const { knex } = require('../../config/database')
+
 // main content
-const getLogin = (req, res, next) => {
-    return res.render('login', { 'note': '' });
-}
-const getLogout = (req, res, next) => {
-    req.session.destroy()
-    return res.redirect('login')
-}
-const postLogin = async (req, res, next) => {
-    const username = req.body.username
-    const password = req.body.password
-    rows = await knex.from('users').select('*').where('username', '=', username)
-    if (rows.length == 0) return res.render('login', { 'note': 'Username or password is wrong' });
-    if (!bcrypt.compareSync(password, rows[0].password)) return res.render('login', {
-        'note': 'Username or password is wrong'
-    });
-    req.session['user'] = username
-    req.session['email'] = rows[0].email
-    return res.redirect('/admin');
-}
 const getRegister = (req, res, next) => {
     return res.render('register', { 'note': req.flash("errors") });
 }
@@ -42,7 +24,7 @@ const postRegister = async (req, res, next) => {
             str += item.msg + "<br>"
         })
         req.flash("errors", str)
-        return res.redirect("")
+        return res.redirect("/admin/user/register")
     }
     const username = req.body.username
     const _password = req.body.password
@@ -109,9 +91,6 @@ const detailUser = async (req, res, next) => {
 }
 // end
 module.exports = {
-    getLogin,
-    getLogout,
-    postLogin,
     getRegister,
     postRegister,
     updateProfile,
