@@ -2,6 +2,7 @@
 exports.up = function(knex) {
     return knex.schema.createTable('type', function (table) {
         table.increments("id_type").primary();
+        table.string("slug_type",500).unique();
         table.string('name_type').notNullable().unique() ;
         table.integer('who_create_type').unsigned();
         table.foreign('who_create_type').references('id').inTable('users').onDelete('CASCADE');

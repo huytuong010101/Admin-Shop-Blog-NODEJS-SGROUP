@@ -6,6 +6,7 @@ const logger = require('morgan');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const Admin = require('./routes/Admin');
+const Client = require('./routes/Client');
 const methodOverride = require('method-override');
 var flash = require('connect-flash-plus');
 require('dotenv').config()
@@ -41,6 +42,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/admin', Admin);
+app.use('', Client);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

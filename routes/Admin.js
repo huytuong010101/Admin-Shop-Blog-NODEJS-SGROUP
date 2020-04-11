@@ -6,30 +6,47 @@ const authHandle = require("../app/admin/authControllers")
 const productHandle = require("../app/admin/productControllers")
 const { updateUserValidate, registerValidate, } = require("../validate/userValidate")
 const { TypeValidate, updateTypeValidate, } = require("../validate/productValidate")
-
+const multer  = require('multer')
+const upload = multer({ dest: 'public/images_of_products' })
 /* GET users listing. */
 //home page
-router.get('', isAuth, userHandle.homePage);
+router.route('')
+    .get(isAuth, userHandle.homePage);
 //auth
-router.get('/user/login', isNotAuth, authHandle.getLogin);
-router.get('/user/logout', authHandle.getLogout);
-router.post('/user/login', authHandle.postLogin);
-router.get('/user/register', userHandle.getRegister);
-router.post('/user/register', registerValidate, userHandle.postRegister);
+router.route('/user/login')
+    .get(isNotAuth, authHandle.getLogin)
+    .post(authHandle.postLogin);
+router.route('/user/logout')
+    .get(authHandle.getLogout);    
+router.route('/user/register')
+    .get(userHandle.getRegister)
+    .post(registerValidate, userHandle.postRegister);
 //view
-router.get('/view/listuser', isAuth, userHandle.renderListUser);
-router.put('/view/edit',updateUserValidate , isAuth, userHandle.updateProfile);
-router.delete('/view/delete', isAuth, userHandle.deleteUser);
-router.get('/view/detail/:id', isAuth, userHandle.detailUser);
-router.get('/view/products', isAuth, productHandle.getProducts);
-router.post('/addnewtype', isAuth, TypeValidate, productHandle.addNewType);
-router.delete('/deletetype', isAuth, productHandle.deleteType);
-router.post('/addnewproduct', isAuth, productHandle.addNewProduct);
-router.delete('/deleteproduct', isAuth, productHandle.deleteProduct);
-router.post('/detailtype', isAuth, productHandle.detailType);
-router.put('/updatetype', isAuth,updateTypeValidate, productHandle.updateType);
-router.post('/detailproduct', isAuth, productHandle.detailProduct);
-router.put('/updateproduct', isAuth,updateTypeValidate, productHandle.updateProduct);
+router.route('/view/listuser')
+    .get(isAuth, userHandle.renderListUser);
+router.route('/view/edit')
+    .put(updateUserValidate , isAuth, userHandle.updateProfile);
+router.route('/view/delete')
+    .delete(isAuth, userHandle.deleteUser);
+router.route('/view/detail/:id')
+    .get(isAuth, userHandle.detailUser);
+router.route('/view/products')
+    .get(isAuth, productHandle.getProducts);
+router.route('/addnewtype')
+    .post(isAuth, TypeValidate, productHandle.addNewType);
+router.route('/deletetype')
+    .delete(isAuth, productHandle.deleteType);
+router.post('/addnewproduct', isAuth, upload.single('product_image'), productHandle.addNewProduct);
+router.route('/deleteproduct')
+    .delete(isAuth, productHandle.deleteProduct);
+router.route('/detailtype')
+    .post(isAuth, productHandle.detailType);
+router.route('/updatetype')
+    .put(isAuth,updateTypeValidate, productHandle.updateType);
+router.route('/detailproduct')
+    .post(isAuth, productHandle.detailProduct);
+router.route('/updateproduct')
+    .put(isAuth,updateTypeValidate, productHandle.updateProduct);
 
 
 

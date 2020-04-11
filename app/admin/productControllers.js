@@ -1,6 +1,7 @@
 // database setting
 const { knex } = require('../../config/database')
 const { validationResult } = require('express-validator');
+const slugify = require('slugify')
 moment = require("moment")
 // main
 const getProducts = async (req, res, next) => {
@@ -32,14 +33,14 @@ const addNewType = async (req, res, next) => {
     // add
     await knex('type').insert({
         'name_type': name,
+        'slug_type': slugify(name + String(Date.now())),
         'who_create_type': user,
     })
     return res.redirect('/admin/view/products')
 }
 const deleteType = async (req, res, next) => {
-    const _id = req.body.iddelete
     await knex('type')
-        .where('id_type', Number(_id))
+        .where('id_type', Number(req.body.iddelete))
         .del()
     return res.redirect("/admin/view/products")
 }
@@ -55,33 +56,39 @@ const addNewProduct = async (req, res, next) => {
         return res.redirect("/admin/view/products")
     }
     const name = req.body.product_name
-    const price = req.body.product_price
-    const decribe = req.body.decribe
-    const type = req.body.type_id
     const user = req.session.idUser
-
+    let path = "/images_of_products/no-img.png" 
+    if (req.file){
+        path = "/" + req.file.destination.split("/").slice(1).join("/") + "/" + req.file.filename
+    }
     // add
     await knex('products').insert({
         'name_product': name,
-        'price': price,
-        'describe': decribe,
-        'type': type,
+        'price': req.body.product_price,
+        'slug_product': slugify(name + String(Date.now()) + String(user)),
+        'describe': req.body.decribe,
+        'type': req.body.type_id,
         'who_create_product': user,
+        'image_product': path,
     })
     return res.redirect('/admin/view/products')
 }
 const deleteProduct = async (req, res, next) => {
-    const _id = req.body.iddelete
     await knex('products')
-        .where('id_product', Number(_id))
+        .where('id_product', Number(req.body.iddelete))
         .del()
     return res.redirect("/admin/view/products")
 }
 const detailType = async (req, res, next) => {
-    const _id = req.body.id
     type = await knex.select('name_type', 'id_type', 'created_at_type', 'updated_at_type', 'fullname')
     .from('type')
-    .where("id_type","=",_id).leftJoin('users', 'type.who_create_type', 'users.id')
+    .where("id_type","=",req.body.id)
+    .leftJoin('users', 'type.who_create_type', 'users.id')
+    products = await knex.select('name_product')
+    .from('products')
+    .where("type","=",req.body.id)
+    console.log(products)
+
     if (type.length == 0){
         result = "";
         data = {}
@@ -90,6 +97,7 @@ const detailType = async (req, res, next) => {
         data = type[0]
         data["created_at_type"] = moment(data["created_at_type"]).format("DD/MM/YYYY")
         data["updated_at_type"] = moment(data["updated_at_type"]).format("DD/MM/YYYY")
+        data["products"] = products; 
     } 
     return res.json({
         "result": result,
@@ -120,10 +128,9 @@ const updateType = async (req, res, next) => {
     return res.json({"result": "OK"})    
 }
 const detailProduct = async (req, res, next) => {
-    const _id = req.body.id
-    product = await knex.select('name_product', 'price', 'describe', 'created_at_product', 'updated_at_product', 'fullname', 'id_type', 'name_type')
+    product = await knex.select('name_product', 'price', 'describe', 'created_at_product', 'updated_at_product', 'image_product', 'fullname', 'id_type', 'name_type')
     .from('products')
-    .where("id_product","=",_id)
+    .where("id_product","=",req.body.id)
     .leftJoin('users', 'products.who_create_product', 'users.id')
     .leftJoin('type', 'products.type', 'type.id_type')
     if (product.length == 0){
@@ -140,18 +147,13 @@ const detailProduct = async (req, res, next) => {
     }) 
 }
 const updateProduct = async (req, res, next) => {
-    const name = req.body.product_name
-    const price = req.body.product_price
-    const decribe = req.body.decribe
-    const type = req.body.type_id
-    const id = req.body.id
     await knex('products')
-        .where('id_product', '=', Number(id))
+        .where('id_product', '=', Number(req.body.id))
         .update({
-            name_product: name,
-            price: price,
-            describe: decribe,
-            type: type,
+            name_product: req.body.product_name,
+            price: req.body.product_price,
+            describe: req.body.decribe,
+            type: req.body.type_id,
         })
     return res.redirect('/admin/view/products')
 }
