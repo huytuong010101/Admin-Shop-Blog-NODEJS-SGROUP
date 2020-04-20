@@ -120,6 +120,7 @@
                                             <th>#</th>
                                             <th>Full name</th>
                                             <th>Username</th>
+                                            <th>Role</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -130,6 +131,13 @@
                                             <td><%=i%></td>
                                             <td><%=user.fullname%></td>
                                             <td><%=user.username%></td>
+                                            <td>
+                                                <%=user.name_role%>
+                                                (
+                                                <a href="/admin/change-role/<%=user.id%>/<%=user.id_role%>">Change
+                                                    role</a>
+                                                )
+                                            </td>
                                             <td class="infoUser">
                                                 <a class="btn btn-primary text-center" href="detail/<%=user.id%>"><i
                                                         class="far fa-credit-card"></i></a>
@@ -140,9 +148,9 @@
                                                 <form class="d-inline" method="POST" action="delete?_method=DELETE">
                                                     <input name="iddelete" type="hidden" value="<%=user.id%>">
                                                     <button class="btn btn-primary text-center"><i
-                                                        class="fas fa-trash-alt"></i>
+                                                            class="fas fa-trash-alt"></i>
                                                 </form>
-                                                
+
                                             </td>
                                         </tr>
                                         <% i = i + 1 %>
@@ -173,8 +181,8 @@
                     <h4 class="modal-title" align="center"><b>Edit User</b></h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form" method="POST" action="edit?_method=PUT" 
-                    onsubmit="return confirm('Are you sure?')">
+                    <form role="form" method="POST" action="edit?_method=PUT"
+                        onsubmit="return confirm('Are you sure?')">
                         <input type="hidden" name="id" value="">
                         <div class="box-body">
                             <div class="form-group">
@@ -194,7 +202,7 @@
                                 <input type="text" class="form-control" name="password">
                             </div>
                         </div>
-                        <div class="modal-footer">              
+                        <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
@@ -218,15 +226,15 @@
     <script src="/js/myadmin.js"></script>
     <!--Show dialog modal-->
     <script>
-        dataUser = <%-JSON.stringify(listUser)%>
-        function showModal(event){
-            index = Number(event.getAttribute("user")) - 1
-            document.getElementsByName("id")[0].value = dataUser[index].id
-            document.getElementsByName("username")[0].value = dataUser[index].username
-            document.getElementsByName("fullname")[0].value = dataUser[index].fullname
-            document.getElementsByName("email")[0].value = dataUser[index].email
-            document.getElementsByName("password")[0].value = dataUser[index].password
-        }
+        dataUser = <% -JSON.stringify(listUser) %>
+            function showModal(event) {
+                index = Number(event.getAttribute("user")) - 1
+                document.getElementsByName("id")[0].value = dataUser[index].id
+                document.getElementsByName("username")[0].value = dataUser[index].username
+                document.getElementsByName("fullname")[0].value = dataUser[index].fullname
+                document.getElementsByName("email")[0].value = dataUser[index].email
+                document.getElementsByName("password")[0].value = dataUser[index].password
+            }
     </script>
     <!--Show nitify-->
     <script>

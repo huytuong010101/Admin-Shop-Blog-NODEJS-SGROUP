@@ -140,17 +140,15 @@
                                             <td><%=item.fullname%></td>
                                             <td>
                                                 <a id_type="<%=item.id_type%>" class="btn btn-primary text-center"
-                                                    onclick="showDetail(this)"
-                                                    data-toggle="modal" data-target="#detailTypeModal">
+                                                    onclick="showDetail(this)" data-toggle="modal"
+                                                    data-target="#detailTypeModal">
                                                     <i class="far fa-credit-card"></i></a>
-                                                <a class="btn btn-primary text-center"
-                                                    data-toggle="modal" data-target="#updateTypeModal" 
-                                                    name_type="<%=item.name_type%>"
-                                                    id_type="<%=item.id_type%>"
-                                                    onclick="showUpdateType(this)">
+                                                <a class="btn btn-primary text-center" data-toggle="modal"
+                                                    data-target="#updateTypeModal" name_type="<%=item.name_type%>"
+                                                    id_type="<%=item.id_type%>" onclick="showUpdateType(this)">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form onsubmit="return confirm('Bạn có chắc muốn xóa ?')" 
+                                                <form onsubmit="return confirm('Bạn có chắc muốn xóa ?')"
                                                     class="d-inline" method="POST"
                                                     action="/admin/deletetype?_method=DELETE">
                                                     <input name="iddelete" type="hidden" value="<%=item.id_type%>">
@@ -201,16 +199,15 @@
                                             <td><%=item.fullname%></td>
                                             <td>
                                                 <a id_product="<%=item.id_product%>" class="btn btn-primary text-center"
-                                                    onclick="showDetailProduct(this)"
-                                                    data-toggle="modal" data-target="#detailProductModal">
+                                                    onclick="showDetailProduct(this)" data-toggle="modal"
+                                                    data-target="#detailProductModal">
                                                     <i class="far fa-credit-card"></i></a>
-                                                <a class="btn btn-primary text-center"
-                                                    data-toggle="modal" data-target="#updateProductModal" 
-                                                    id_product="<%=item.id_product%>"
+                                                <a class="btn btn-primary text-center" data-toggle="modal"
+                                                    data-target="#updateProductModal" id_product="<%=item.id_product%>"
                                                     onclick="showUpdateProduct(this)">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?')" 
+                                                <form onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?')"
                                                     class="d-inline" method="POST"
                                                     action="/admin/deleteproduct?_method=DELETE">
                                                     <input name="iddelete" type="hidden" value="<%=item.id_product%>">
@@ -247,8 +244,8 @@
                 <div class="modal-body">
                     <section class="panel panel-default">
                         <div class="panel-body">
-                            <form method="POST" action="/admin/addnewproduct" enctype="multipart/form-data" 
-                            class="form-horizontal" role="form">
+                            <form method="POST" action="/admin/addnewproduct" enctype="multipart/form-data"
+                                class="form-horizontal" role="form">
                                 <div class="form-group">
                                     <label for="name" class="col-sm-3 control-label">Name</label>
                                     <div class="col-sm-9">
@@ -283,8 +280,8 @@
                                 <div class="form-group">
                                     <label for="about" class="col-sm-3 control-label">Ảnh sản phẩm</label>
                                     <div class="col-sm-9">
-                                        <input type="file" class="form-control"
-                                            name="product_image" placeholder="Chọn ảnh sản phẩm">
+                                        <input type="file" class="form-control" name="product_image"
+                                            placeholder="Chọn ảnh sản phẩm">
                                     </div>
                                 </div> <!-- form-group // -->
                                 <hr>
@@ -313,26 +310,26 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Name of type:</label>
-                            <input readonly type="text" class="form-control" id="name_type">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Who create:</label>
-                            <input readonly type="text" class="form-control" id="user_type">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Created at:</label>
-                            <input readonly type="text" class="form-control" id="created_at_type">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Updated at:</label>
-                            <input readonly type="text" class="form-control" id="updated_at_type">
-                        </div>
-                        <ul class="list-group" id="productsOfType">
-                            <li class="list-group-item active">Các sản phẩm</li>
-                            
-                        </ul>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Name of type:</label>
+                        <input readonly type="text" class="form-control" id="name_type">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Who create:</label>
+                        <input readonly type="text" class="form-control" id="user_type">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Created at:</label>
+                        <input readonly type="text" class="form-control" id="created_at_type">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Updated at:</label>
+                        <input readonly type="text" class="form-control" id="updated_at_type">
+                    </div>
+                    <ul class="list-group" id="productsOfType">
+                        <li class="list-group-item active">Các sản phẩm</li>
+
+                    </ul>
                 </div>
             </div>
         </div>
@@ -349,13 +346,14 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Name of type:</label>
-                            <form id="formUpdateType">
-                                <input required type="text" class="form-control" id="name_update_type" name="name_update_type">
-                                <input type="hidden" class="form-control" id="id_update_type" name="id_update_type">
-                            </form>
-                        </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Name of type:</label>
+                        <form id="formUpdateType">
+                            <input required type="text" class="form-control" id="name_update_type"
+                                name="name_update_type">
+                            <input type="hidden" class="form-control" id="id_update_type" name="id_update_type">
+                        </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -376,39 +374,39 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                        <div class="form-group text-center">
-                            <img src="#" alt="product_image" id="product_image" height="200px">
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Name of Product:</label>
-                            <input readonly type="text" class="form-control" id="name_poduct">
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Price:</label>
-                            <input readonly type="text" class="form-control" id="price">
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Decribe:</label>
-                            <textarea readonly type="text" class="form-control" id="decribe">
+                    <div class="form-group text-center">
+                        <img src="#" alt="product_image" id="product_image" height="200px">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Name of Product:</label>
+                        <input readonly type="text" class="form-control" id="name_poduct">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Price:</label>
+                        <input readonly type="text" class="form-control" id="price">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Decribe:</label>
+                        <textarea readonly type="text" class="form-control" id="decribe">
                                 </textarea>
 
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Type:</label>
-                            <input readonly type="text" class="form-control" id="type_product">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Who create:</label>
-                            <input readonly type="text" class="form-control" id="user_product">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Created at:</label>
-                            <input readonly type="text" class="form-control" id="created_at_product">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="col-form-label">Updated at:</label>
-                            <input readonly type="text" class="form-control" id="updated_at_product">
-                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Type:</label>
+                        <input readonly type="text" class="form-control" id="type_product">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Who create:</label>
+                        <input readonly type="text" class="form-control" id="user_product">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Created at:</label>
+                        <input readonly type="text" class="form-control" id="created_at_product">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Updated at:</label>
+                        <input readonly type="text" class="form-control" id="updated_at_product">
+                    </div>
                 </div>
             </div>
         </div>
@@ -427,13 +425,14 @@
                 <div class="modal-body">
                     <section class="panel panel-default">
                         <div class="panel-body">
-                            <form method="POST" action="/admin/updateproduct?_method=PUT" class="form-horizontal" role="form">
+                            <form method="POST" action="/admin/updateproduct?_method=PUT" class="form-horizontal"
+                                role="form">
                                 <input type="hidden" id="id_product_update" name="id">
                                 <div class="form-group">
                                     <label for="name" class="col-sm-3 control-label">Name</label>
                                     <div class="col-sm-9">
-                                        <input required type="text" class="form-control" name="product_name" id="product_name_update"
-                                            placeholder="Nokia 1080">
+                                        <input required type="text" class="form-control" name="product_name"
+                                            id="product_name_update" placeholder="Nokia 1080">
                                     </div>
                                 </div> <!-- form-group // -->
                                 <div class="form-group">
@@ -514,13 +513,13 @@
 
                 });
         }
-        function showUpdateType(event){
+        function showUpdateType(event) {
             name_type = event.getAttribute("name_type")
             id_type = event.getAttribute("id_type")
             $("#name_update_type").val(name_type)
             $("#id_update_type").val(id_type)
         }
-        function updateType(){
+        function updateType() {
             data = $('#formUpdateType').serialize();
             $.ajax({
                 method: "POST",
@@ -528,10 +527,10 @@
                 data: data
             })
                 .done(function (response) {
-                    if (response["result"] != "OK"){
+                    if (response["result"] != "OK") {
                         alert(response["error"])
                     } else {
-                        location.reload(); 
+                        location.reload();
                     }
                 })
         }
@@ -555,7 +554,7 @@
                     $('#product_image').attr("src", response["data"]["image_product"])
                 });
         }
-        function showUpdateProduct(event){
+        function showUpdateProduct(event) {
             id_product = event.getAttribute("id_product")
             $.ajax({
                 method: "POST",

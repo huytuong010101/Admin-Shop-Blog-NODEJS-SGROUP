@@ -32,12 +32,16 @@ const postRegister = async (req, res, next) => {
     const email = req.body.email
     const fullname = req.body.fullname
     // add
-    await knex('users').insert({
-        'username': username,
-        'password': password,
-        'fullname': fullname,
-        'email': email,
-    })
+    let roleDefault = await knex("role").select("id_role", "is_Default").where("is_Default", "=", 1);
+    roleDefault = roleDefault[0]["id_role"]
+    // add
+    await knex("users").insert({
+        username: username,
+        password: password,
+        fullname: fullname,
+        email: email,
+        role: roleDefault,
+    });
     return res.redirect('login')
 }
 const updateProfile = async (req, res, next) => {
@@ -73,7 +77,8 @@ const deleteUser = async (req, res, next) => {
     return res.redirect("/admin/view/listuser")
 }
 const renderListUser = async (req, res, next) => {
-    result = await knex.from('users').select("*")
+    result = await knex.select("*").from("users").leftJoin('role', 'users.role', 'role.id_role')
+    console.log(result)
     return res.render("list-user", {
         "user": req.session.user,
         "listUser": result,
@@ -89,6 +94,17 @@ const detailUser = async (req, res, next) => {
     rows[0].updated_at = moment(rows[0].updated_at).format("DD/MM/YYYY")
     return res.render("profileuser", { "user": req.session.user, "detail": rows[0] });
 }
+const changeRole = async (req, res, next) => {
+    console.log("--------------------------------")
+    userId = Number(req.params["userid"]);
+    roleId = Number(req.params["roleid"]);
+    if (isNaN(userId) || isNaN(roleId)) {
+        return res.redirect("/404");
+    }
+    targetRole = roleId == 2 ? 3 : 2;
+    await knex("users").where("id", "=", userId).update({ role: targetRole });
+    return res.redirect("/admin/view/listuser")
+}
 // end
 module.exports = {
     getRegister,
@@ -98,4 +114,5 @@ module.exports = {
     homePage,
     renderListUser,
     detailUser,
+    changeRole,
 }
