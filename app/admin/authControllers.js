@@ -6,7 +6,7 @@ const { knex } = require('../../config/database')
 
 // main
 const getLogin = (req, res, next) => {
-    return res.render('login', { 'note': '' });
+    return res.render('admin/login', { 'note': '' });
 }
 const getLogout = (req, res, next) => {
     req.session.destroy()
@@ -15,18 +15,18 @@ const getLogout = (req, res, next) => {
 const postLogin = async (req, res, next) => {
     const username = req.body.username
     const password = req.body.password
-    rows = await knex.from('users').select('*')
+    rows = await knex.from('users').first('*')
         .where('username', '=', username)
         .where('role', '!=', 3)
         .leftJoin('role', 'users.role', 'role.id_role')
-    if (rows.length == 0) return res.render('login', { 'note': 'Username or password is wrong' });
-    if (!bcrypt.compareSync(password, rows[0].password)) return res.render('login', {
+    if (!rows) return res.render('admin/login', { 'note': 'Username or password is wrong' });
+    if (!bcrypt.compareSync(password, rows.password)) return res.render('admin/login', {
         'note': 'Username or password is wrong'
     });
     req.session['user'] = username
-    req.session['role'] = rows[0].name_role
-    req.session['email'] = rows[0].email
-    req.session['idUser'] = rows[0].id
+    req.session['role'] = rows.name_role
+    req.session['email'] = rows.email
+    req.session['idUser'] = rows.id
     return res.redirect('/admin');
 }
 

@@ -48,9 +48,9 @@ const postLogin = async (req, res, next) => {
   const password = req.body.password;
   rows = await knex.from("users").select("*").where("username", "=", username).leftJoin('role', 'users.role', 'role.id_role');
   if (rows.length == 0)
-    return res.render("login", { note: "Username or password is wrong" });
+    return res.render("admin/login", { note: "Username or password is wrong" });
   if (!bcrypt.compareSync(password, rows[0].password))
-    return res.render("login", {
+    return res.render("admin/login", {
       note: "Username or password is wrong",
     });
   req.session["user"] = username;

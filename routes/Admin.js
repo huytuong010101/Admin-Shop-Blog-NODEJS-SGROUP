@@ -5,10 +5,11 @@ const userHandle = require("../app/admin/userControllers")
 const authHandle = require("../app/admin/authControllers")
 const productHandle = require("../app/admin/productControllers")
 const { updateUserValidate, registerValidate, } = require("../validate/userValidate")
-const { TypeValidate, updateTypeValidate, } = require("../validate/productValidate")
+const { TypeValidate, updateTypeValidate, CategoryValidate, updateCategoryValidate } = require("../validate/productValidate")
 const multer = require('multer')
 const upload = multer({ dest: 'public/images_of_products' })
 const checkRole = require("../app/role/checkRoleMiddleware")
+const handlePost = require("../app/admin/postControlles")
 /* GET users listing. */
 //home page
 router.route('')
@@ -19,9 +20,6 @@ router.route('/user/login')
     .post(authHandle.postLogin);
 router.route('/user/logout')
     .get(authHandle.getLogout);
-router.route('/user/register')
-    .get(userHandle.getRegister)
-    .post(registerValidate, userHandle.postRegister);
 //view
 router.route('/view/listuser')
     .get(isAuth, checkRole.isAdminOrSuperuser, userHandle.renderListUser);
@@ -48,9 +46,22 @@ router.route('/detailproduct')
     .post(isAuth, checkRole.isAdminOrSuperuser, productHandle.detailProduct);
 router.route('/updateproduct')
     .put(isAuth, checkRole.isAdminOrSuperuser, updateTypeValidate, productHandle.updateProduct);
+//posts
+router.route('/list-posts')
+    .get(isAuth, checkRole.isAdminOrSuperuser, handlePost.getPosts)
+router.route('/add-new-category')
+    .post(isAuth, checkRole.isAdminOrSuperuser, CategoryValidate, handlePost.addNewCategory);
 //change route
-router.route("/change-role/:userid/:roleid").get(isAuth, checkRole.isSuperUser, userHandle.changeRole)
-
+router.route("/change-role/:userid/:roleid")
+    .get(isAuth, checkRole.isSuperUser, userHandle.changeRole)
+router.route('/update-category')
+    .put(isAuth, checkRole.isAdminOrSuperuser, updateCategoryValidate, handlePost.updateCategory);
+router.route('/delete-category')
+    .delete(isAuth, checkRole.isAdminOrSuperuser, handlePost.deleteCategoty);
+router.route('/add-post')
+    .get(isAuth, checkRole.isAdminOrSuperuser, handlePost.getAddPost)
+router.route('/update-post/:slug')
+    .get(isAuth, checkRole.isAdminOrSuperuser, handlePost.getUpdatePost)
 
 // view not use
 

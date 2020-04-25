@@ -7,10 +7,10 @@ moment = require("moment")
 const getProducts = async (req, res, next) => {
     type = await knex.select('*').from('type').leftJoin('users', 'type.who_create_type', 'users.id')
     products = await knex.select('*')
-    .from('products')
-    .leftJoin('users', 'products.who_create_product', 'users.id')
-    .leftJoin('type', 'products.type', 'type.id_type')
-    return res.render('list-product', { 
+        .from('products')
+        .leftJoin('users', 'products.who_create_product', 'users.id')
+        .leftJoin('type', 'products.type', 'type.id_type')
+    return res.render('admin/list-product', {
         "user": req.session.user,
         'note': req.flash("errors_type"),
         "type": type,
@@ -57,8 +57,8 @@ const addNewProduct = async (req, res, next) => {
     }
     const name = req.body.product_name
     const user = req.session.idUser
-    let path = "/images_of_products/no-img.png" 
-    if (req.file){
+    let path = "/images_of_products/no-img.png"
+    if (req.file) {
         path = "/" + req.file.destination.split("/").slice(1).join("/") + "/" + req.file.filename
     }
     // add
@@ -81,24 +81,24 @@ const deleteProduct = async (req, res, next) => {
 }
 const detailType = async (req, res, next) => {
     type = await knex.select('name_type', 'id_type', 'created_at_type', 'updated_at_type', 'fullname')
-    .from('type')
-    .where("id_type","=",req.body.id)
-    .leftJoin('users', 'type.who_create_type', 'users.id')
+        .from('type')
+        .where("id_type", "=", req.body.id)
+        .leftJoin('users', 'type.who_create_type', 'users.id')
     products = await knex.select('name_product')
-    .from('products')
-    .where("type","=",req.body.id)
+        .from('products')
+        .where("type", "=", req.body.id)
     console.log(products)
 
-    if (type.length == 0){
+    if (type.length == 0) {
         result = "";
         data = {}
-    } else{
+    } else {
         result = "OK";
         data = type[0]
         data["created_at_type"] = moment(data["created_at_type"]).format("DD/MM/YYYY")
         data["updated_at_type"] = moment(data["updated_at_type"]).format("DD/MM/YYYY")
-        data["products"] = products; 
-    } 
+        data["products"] = products;
+    }
     return res.json({
         "result": result,
         "data": data
@@ -125,15 +125,15 @@ const updateType = async (req, res, next) => {
         .update({
             name_type: name,
         })
-    return res.json({"result": "OK"})    
+    return res.json({ "result": "OK" })
 }
 const detailProduct = async (req, res, next) => {
     product = await knex.select('name_product', 'price', 'describe', 'created_at_product', 'updated_at_product', 'image_product', 'fullname', 'id_type', 'name_type')
-    .from('products')
-    .where("id_product","=",req.body.id)
-    .leftJoin('users', 'products.who_create_product', 'users.id')
-    .leftJoin('type', 'products.type', 'type.id_type')
-    if (product.length == 0){
+        .from('products')
+        .where("id_product", "=", req.body.id)
+        .leftJoin('users', 'products.who_create_product', 'users.id')
+        .leftJoin('type', 'products.type', 'type.id_type')
+    if (product.length == 0) {
         return res.json({
             "result": "NOT OK",
         })
@@ -144,7 +144,7 @@ const detailProduct = async (req, res, next) => {
     return res.json({
         "result": "OK",
         "data": data,
-    }) 
+    })
 }
 const updateProduct = async (req, res, next) => {
     await knex('products')

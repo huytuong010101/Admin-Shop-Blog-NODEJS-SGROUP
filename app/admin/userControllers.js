@@ -9,40 +9,8 @@ require('dotenv').config()
 const { knex } = require('../../config/database')
 
 // main content
-const getRegister = (req, res, next) => {
-    return res.render('register', { 'note': req.flash("errors") });
-}
 const homePage = (req, res, next) => {
-    return res.render("dashboard", { "user": req.session.user });
-}
-const postRegister = async (req, res, next) => {
-    const errors = validationResult(req);
-    //validate
-    if (!errors.isEmpty()) {
-        str = ""
-        errors.errors.forEach((item) => {
-            str += item.msg + "<br>"
-        })
-        req.flash("errors", str)
-        return res.redirect("/admin/user/register")
-    }
-    const username = req.body.username
-    const _password = req.body.password
-    const password = bcrypt.hashSync(_password, salt);
-    const email = req.body.email
-    const fullname = req.body.fullname
-    // add
-    let roleDefault = await knex("role").select("id_role", "is_Default").where("is_Default", "=", 1);
-    roleDefault = roleDefault[0]["id_role"]
-    // add
-    await knex("users").insert({
-        username: username,
-        password: password,
-        fullname: fullname,
-        email: email,
-        role: roleDefault,
-    });
-    return res.redirect('login')
+    return res.render("admin/dashboard", { "user": req.session.user });
 }
 const updateProfile = async (req, res, next) => {
     const errors = validationResult(req);
@@ -79,7 +47,7 @@ const deleteUser = async (req, res, next) => {
 const renderListUser = async (req, res, next) => {
     result = await knex.select("*").from("users").leftJoin('role', 'users.role', 'role.id_role')
     console.log(result)
-    return res.render("list-user", {
+    return res.render("admin/list-user", {
         "user": req.session.user,
         "listUser": result,
         'note': req.flash("errorsUpdate")
@@ -92,7 +60,7 @@ const detailUser = async (req, res, next) => {
     if (rows.length == 0) return res.redirect("/admin/view/listuser")
     rows[0].created_at = moment(rows[0].created_at).format("DD/MM/YYYY")
     rows[0].updated_at = moment(rows[0].updated_at).format("DD/MM/YYYY")
-    return res.render("profileuser", { "user": req.session.user, "detail": rows[0] });
+    return res.render("admin/profileuser", { "user": req.session.user, "detail": rows[0] });
 }
 const changeRole = async (req, res, next) => {
     console.log("--------------------------------")
@@ -107,8 +75,6 @@ const changeRole = async (req, res, next) => {
 }
 // end
 module.exports = {
-    getRegister,
-    postRegister,
     updateProfile,
     deleteUser,
     homePage,

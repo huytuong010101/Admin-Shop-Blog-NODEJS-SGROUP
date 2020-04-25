@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>MyShop</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- Custom styles for this template -->
+  <link href="/css/shop-homepage.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Huy Tuong Shop</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+          <% if (user) {%>
+          <li class="nav-item">
+            <a class="nav-link" href="/my-post">Bài viết của tôi</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/my-product">Sản phẩm của tôi</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Đăng xuất (<%=user%>)</a>
+          </li>
+          <%} else {%>
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Đăng nhập</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/register">Đăng kí</a>
+          </li>
+          <%}%>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <h3 class="my-4">Danh mục</h3>
+        <div class="list-group">
+          <a href="/" class="list-group-item">Tất cả sản phẩm</a>
+        </div>
+        <div class="list-group">
+          <% type.forEach((item) => {%>
+          <a href="/category/<%=item.slug_type%>" class="list-group-item"><%=item.name_type%></a>
+          <%})%>
+      </div>
+      <h3 class="my-4">Chủ đề</h3>
+      <div class="list-group">
+        <a href="/posts" class="list-group-item">Tất cả bài viết</a>
+      </div>
+      <div class="list-group">
+        <% category.forEach((item) => {%>
+        <a href="/post/category/<%=item.slug_category%>" class="list-group-item"><%=item.name_category%></a>
+        <%})%>
+      </div>
+    </div>
+    <!-- /.col-lg-3 -->
+
+    <div class="col-lg-9" style="min-height: 100vh;">
+      <br><br>
+      <h4 class="text-center">Chi tiết sản phẩm</h4>
+      <div class="card">
+        <div class="row">
+          <aside class="col-sm-5 border-right">
+            <article class="gallery-wrap">
+              <div class="img-big-wrap">
+                <div> <a href="#"><img width="100%" src="<%=product.image_product%>"></a></div>
+              </div> <!-- slider-product.// -->
+              <br>
+              <div class="img-small-wrap">
+                <div class="item-gallery div-small-image"> <img class="small-image" src="<%=product.image_product%>">
+                </div>
+                <div class="item-gallery div-small-image"> <img class="small-image" src="<%=product.image_product%>">
+                </div>
+                <div class="item-gallery div-small-image"> <img class="small-image" src="<%=product.image_product%>">
+                </div>
+                <div class="item-gallery div-small-image"> <img class="small-image" src="<%=product.image_product%>">
+                </div>
+              </div> <!-- slider-nav.// -->
+            </article> <!-- gallery-wrap .end// -->
+          </aside>
+          <aside class="col-sm-7">
+            <article class="card-body p-5">
+              <h3 class="title mb-3"><%=product.name_product%></h3>
+
+              <p class="price-detail-wrap">
+                <span class="price h3 text-warning">
+                  <span class="currency">VNĐ |</span><span class="num"><%=product.price%></span>
+                </span>
+                <span>/1 SP</span>
+              </p> <!-- price-detail-wrap .// -->
+              <dl class="item-property">
+                <dt>Mô tả</dt>
+                <dd>
+                  <p><%=product.describe%> </p>
+                </dd>
+              </dl>
+
+
+              <hr>
+              <div class="row">
+                <div class="col-sm-12">
+                  <dl class="param param-inline">
+                    <dt>Người bán: </dt>
+                    <dd>
+                      <p><%=product.fullname%> </p>
+                    </dd>
+                  </dl> <!-- item-property .// -->
+                </div> <!-- col.// -->
+
+                <hr>
+                <a href="#" class="btn btn-lg btn-primary text-uppercase"> Mua ngay </a>
+                <a href="#" class="btn btn-lg btn-outline-primary text-uppercase"> <i class="fas fa-shopping-cart"></i>
+                  Thêm vào giỏ hàng </a>
+            </article> <!-- card-body.// -->
+          </aside> <!-- col.// -->
+        </div> <!-- row.// -->
+      </div> <!-- card.// -->
+
+    </div>
+    <!-- /.col-lg-9 -->
+
+    </div>
+    <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

@@ -1,39 +1,44 @@
 const { knex } = require("../../config/database");
 const slugify = require('slugify')
+
 const getAllProduct = async (req, res, next) => {
+  category = await knex.select("name_category", "slug_category").from("category");
   type = await knex.select("name_type", "slug_type").from("type");
   products = await knex.select("*").from("products");
-  return res.render("show-products", {
+  return res.render("client/show-products", {
     note: "Tất cả sản phẩm",
     type: type,
+    category: category,
     products: products,
     user: req.session["user"],
   });
 };
 
 const getMyProduct = async (req, res, next) => {
+  category = await knex.select("name_category", "slug_category").from("category");
   type = await knex.select("*").from("type");
   products = await knex.select("*").from("products").where("who_create_product", "=", Number(req.session["idUser"]));
   return res.render("client/my-product", {
     note: "Tất cả sản phẩm cuả bạn",
     type: type,
+    category: category,
     products: products,
     user: req.session["user"],
   });
 };
 
 const getProductByCategory = async (req, res, next) => {
+  category = await knex.select("name_category", "slug_category").from("category");
   type = await knex.select("name_type", "slug_type").from("type");
   products = await knex
     .select("*")
     .from("type")
     .where("slug_type", "=", req.params.type)
     .rightJoin("products", "type.id_type", "products.type");
-  console.log(products);
-  console.log(req.params.type);
-  return res.render("show-products", {
+  return res.render("client/show-products", {
     note: products[0] ? "Sản phẩm thuộc " + products[0].name_type : "---",
     type: type,
+    category: category,
     products: products,
     user: req.session["user"],
   });
@@ -41,6 +46,7 @@ const getProductByCategory = async (req, res, next) => {
 
 const detailProduct = async (req, res, next) => {
   type = await knex.select("name_type", "slug_type").from("type");
+  category = await knex.select("name_category", "slug_category").from("category");
   product = await knex
     .select("name_product", "describe", "price", "fullname", "image_product")
     .from("products")
@@ -49,9 +55,9 @@ const detailProduct = async (req, res, next) => {
   if (product.length == 0) {
     return res.redirect("/404");
   }
-  console.log(product);
-  return res.render("detail-product", {
+  return res.render("client/detail-product", {
     type: type,
+    category: category,
     product: product[0],
     user: req.session["user"],
   });
