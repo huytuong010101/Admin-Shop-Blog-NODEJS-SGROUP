@@ -6,7 +6,7 @@ const { isAuth, isNotAuth } = require('../app/admin/authMiddlewares');
 const userHandle = require('../app/admin/userControllers');
 const authHandle = require('../app/admin/authControllers');
 const productHandle = require('../app/admin/productControllers');
-const { updateUserValidate, registerValidate } = require('../validate/userValidate');
+const { updateUserValidate } = require('../validate/userValidate');
 const {
     TypeValidate, updateTypeValidate, CategoryValidate, updateCategoryValidate,
 } = require('../validate/productValidate');

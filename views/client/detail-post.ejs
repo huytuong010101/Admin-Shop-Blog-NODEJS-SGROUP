@@ -107,18 +107,27 @@
 
               <!-- Author -->
               <p class="lead">
-                by
+                Tác giả
                 <a href="#"><%=post.fullname%></a>
               </p>
 
               <hr>
 
               <!-- Date/Time -->
-              <p>Posted on <%=post.created_at_post%></p>
+              <p>Đăng lúc <%=post.created_at_post%></p>
+
+              <hr>
+              <!-- Tags -->
+              <p>
+                Thẻ:
+                <% tags.forEach((item) => { %>
+                <a href="/tags/<%=item.id_tag%>" class="badge badge-primary"><%=item.name_tag%></a>
+                <%})%>
+              </p>
 
               <hr>
 
-              <div class="body">
+              <div class="body overflow-hidden">
                 <%-post.content%>
               </div>
           </aside> <!-- col.// -->
@@ -143,8 +152,6 @@
     </footer>
 
     <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

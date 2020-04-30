@@ -35,10 +35,12 @@ router.route('/detail-post/:slug')
   .get(handlePost.detailPost);
 router.route('/my-post')
   .get(isAuth, handlePost.myPost);
-router.route('/new-post')
+router.route('/post/new-post')
   .get(isAuth, handlePost.getAddPost);
 router.route('/update-post/:slug')
   .get(isAuth, handlePost.getUpdatePost);
+router.route('/tags/:tag')
+  .get(handlePost.getPostByTag);
 // view not use
 
 module.exports = router;

@@ -93,7 +93,7 @@
       <div class="row">
         <div class="col-12 text-center">
           <button style="margin-bottom: 20px;" type="button" class="btn btn-primary"
-            onclick="window.location.href='/new-post'">Viết bài viết mới </button>
+            onclick="window.location.href='/post/new-post'">Viết bài viết mới </button>
         </div>
         <% posts.forEach((item) => { %>
 
@@ -151,8 +151,8 @@
     </footer>
 
     <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
       function deletePost(event) {
         if (!confirm("Are you sure?")) return;

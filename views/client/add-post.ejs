@@ -11,7 +11,10 @@
 
   <!-- Bootstrap core CSS -->
   <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
   <!-- Custom styles for this template -->
   <link href="/css/shop-homepage.css" rel="stylesheet" />
 </head>
@@ -90,7 +93,7 @@
 
       <div class="col-sm-12">
         <div class="white-box">
-          <form id="postForm" action="/api/v1/add-post" method="POST">
+          <form id="postForm" action="/api/v1/add-post" method="POST" enctype="multipart/form-data">
             <div class="form-group">
               <label for="title">Title</label>
               <input name="title" type="text" class="form-control" id="title" placeholder="Title of post">
@@ -106,6 +109,11 @@
             <div class="form-group">
               <label for="content">Content</label>
               <textarea name="content" class="form-control" id="content" rows="20"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="title">Tags</label>
+              <input data-role="tagsinput" name="title" type="text" class="form-control" id="tags"
+                placeholder="Tag of post">
             </div>
             <button type="button" onclick="submitPost()" class="btn btn-success">POST</button>
           </form>
@@ -140,16 +148,24 @@
     </script>
     <script>
       tinymce.init({
-        selector: '#content'
+        selector: '#content',
+        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons',
+        plugins: ['image'],
+        images_upload_url: '/api/v1/upload-image',
+        images_upload_credentials: true,
+        automatic_uploads: true,
+        relative_urls: false,
       });
     </script>
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-      const submitPost = () => {
+      const submitPost = async () => {
+        await tinymce.activeEditor.uploadImages();
         data = {
           title: $("#title").val(),
           category: $("#category").val(),
+          tags: $('#tags').val(),
           content: tinyMCE.get('content').getContent(),
         }
         $.ajax({

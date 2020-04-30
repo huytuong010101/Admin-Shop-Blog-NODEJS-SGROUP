@@ -76,11 +76,20 @@ const getUpdatePost = async (req, res) => {
     const post = await knex('posts').first('*').where('slug_post', '=', req.params['slug'])
         .leftJoin('category', 'posts.category', 'category.id_category');
     if (!post) return res.redirect('404');
+    const _tags = await knex('tag_post').select('*').where('post', '=', post.id_post)
+        .leftJoin('tags', 'tag_post.tag', 'tags.id_tag');
+    let tags = [];
+    await _tags.forEach((item) => {
+        tags.push(item.name_tag);
+    });
+    tags = tags.join(',');
+
     return res.render('admin/update-post', {
         user: req.session.user,
         note: undefined,
         category,
         post,
+        tags,
     });
 };
 module.exports = {
