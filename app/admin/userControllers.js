@@ -12,7 +12,7 @@ require('dotenv').config();
 const { knex } = require('../../config/database');
 
 // main content
-const homePage = (req, res) => res.render('admin/dashboard', { user: req.session.user });
+const homePage = (req, res) => res.render('admin/dashboard', { user: req.session.user ? req.session.user.username : undefined });
 const updateProfile = async (req, res) => {
     const errors = validationResult(req);
     // validate
@@ -48,7 +48,7 @@ const deleteUser = async (req, res) => {
 const renderListUser = async (req, res) => {
     const result = await knex.select('*').from('users').leftJoin('role', 'users.role', 'role.id_role');
     return res.render('admin/list-user', {
-        user: req.session.user,
+        user: req.session.user ? req.session.user.username : undefined,
         listUser: result,
         note: req.flash('errorsUpdate'),
     });
@@ -60,7 +60,7 @@ const detailUser = async (req, res) => {
     if (rows.length === 0) return res.redirect('/admin/view/listuser');
     rows[0].created_at = moment(rows[0].created_at).format('DD/MM/YYYY');
     rows[0].updated_at = moment(rows[0].updated_at).format('DD/MM/YYYY');
-    return res.render('admin/profileuser', { user: req.session.user, detail: rows[0] });
+    return res.render('admin/profileuser', { user: req.session.user ? req.session.user.username : undefined, detail: rows[0] });
 };
 const changeRole = async (req, res) => {
     const userId = Number(req.params['userid']);

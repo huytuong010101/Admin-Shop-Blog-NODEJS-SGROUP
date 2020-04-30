@@ -42,17 +42,19 @@ const postRegister = async (req, res) => {
 const postLogin = async (req, res) => {
   const { username } = req.body;
   const { password } = req.body;
-  const rows = await knex.from('users').select('*').where('username', '=', username).leftJoin('role', 'users.role', 'role.id_role');
-  if (rows.length === 0) { return res.render('admin/login', { note: 'Username or password is wrong' }); }
-  if (!bcrypt.compareSync(password, rows[0].password)) {
+  const rows = await knex.from('users').first('*').where('username', '=', username).leftJoin('role', 'users.role', 'role.id_role');
+  if (!rows) { return res.render('admin/login', { note: 'Username or password is wrong' }); }
+  if (!bcrypt.compareSync(password, rows.password)) {
     return res.render('admin/login', {
       note: 'Username or password is wrong',
     });
   }
-  req.session['user'] = username;
-  req.session['role'] = rows[0].name_role;
-  req.session['email'] = rows[0].email;
-  req.session['idUser'] = rows[0].id;
+  req.session.user = {
+    username,
+    role: rows.name_role,
+    email: rows.email,
+    idUser: rows.id,
+  };
   return res.redirect('/');
 };
 

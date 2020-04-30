@@ -11,7 +11,7 @@ const getAllPost = async (req, res) => {
         type,
         category,
         posts,
-        user: req.session['user'],
+        user: req.session.user ? req.session.user.username : undefined,
     });
 };
 const getPostByCategory = async (req, res) => {
@@ -25,7 +25,7 @@ const getPostByCategory = async (req, res) => {
         type,
         category,
         posts,
-        user: req.session['user'],
+        user: req.session.user ? req.session.user.username : undefined,
     });
 };
 const detailPost = async (req, res) => {
@@ -45,18 +45,18 @@ const detailPost = async (req, res) => {
         category,
         post,
         tags,
-        user: req.session['user'],
+        user: req.session.user ? req.session.user.username : undefined,
     });
 };
 const myPost = async (req, res) => {
     const category = await knex.select('name_category', 'slug_category').from('category');
     const type = await knex.select('name_type', 'slug_type').from('type');
-    const posts = await knex.select('*').from('posts').where('user_post', '=', req.session.idUser);
+    const posts = await knex.select('*').from('posts').where('user_post', '=', req.session.user.idUser);
     return res.render('client/my-post', {
         type,
         category,
         posts,
-        user: req.session['user'],
+        user: req.session.user ? req.session.user.username : undefined,
     });
 };
 const getAddPost = async (req, res) => {
@@ -65,7 +65,7 @@ const getAddPost = async (req, res) => {
     return res.render('client/add-post', {
         type,
         category,
-        user: req.session['user'],
+        user: req.session.user ? req.session.user.username : undefined,
     });
 };
 const getUpdatePost = async (req, res) => {
@@ -84,7 +84,7 @@ const getUpdatePost = async (req, res) => {
     return res.render('client/update-post', {
         type,
         category,
-        user: req.session['user'],
+        user: req.session.user ? req.session.user.username : undefined,
         post,
         tags,
     });
@@ -102,7 +102,7 @@ const getPostByTag = async (req, res) => {
         type,
         category,
         posts,
-        user: req.session['user'],
+        user: req.session.user ? req.session.user.username : undefined,
     });
 };
 module.exports = {

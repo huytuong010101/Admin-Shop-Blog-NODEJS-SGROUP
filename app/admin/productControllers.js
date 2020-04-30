@@ -13,7 +13,7 @@ const getProducts = async (req, res) => {
         .leftJoin('users', 'products.user_product', 'users.id')
         .leftJoin('type', 'products.type', 'type.id_type');
     return res.render('admin/list-product', {
-        user: req.session.user,
+        user: req.session.user ? req.session.user.username : undefined,
         note: req.flash('errors_type'),
         type,
         products,
@@ -31,12 +31,11 @@ const addNewType = async (req, res) => {
         return res.redirect('/admin/view/products');
     }
     const name = req.body.nameOfNewType;
-    const user = req.session.idUser;
     // add
     await knex('type').insert({
         name_type: name,
         slug_type: slugify(name + String(Date.now())),
-        user_product_type: user,
+        user_product_type: req.session.user.idUser,
     });
     return res.redirect('/admin/view/products');
 };
@@ -58,7 +57,7 @@ const addNewProduct = async (req, res) => {
         return res.redirect('/admin/view/products');
     }
     const name = req.body.product_name;
-    const user = req.session.idUser;
+    const user = req.session.user.idUser;
     let path = '/images_of_products/no-img.png';
     if (req.file) {
         path = `/${req.file.destination.split('/').slice(1).join('/')}/${req.file.filename}`;

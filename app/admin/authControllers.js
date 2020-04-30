@@ -23,10 +23,12 @@ const postLogin = async (req, res) => {
             note: 'Username or password is wrong',
         });
     }
-    req.session.user = username;
-    req.session.role = rows.name_role;
-    req.session.email = rows.email;
-    req.session.idUser = rows.id;
+    req.session.user = {
+        username,
+        role: rows.name_role,
+        email: rows.email,
+        idUser: rows.id,
+    };
     return res.redirect('/admin');
 };
 

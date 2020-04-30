@@ -4,13 +4,13 @@ const slugify = require('slugify');
 const { knex } = require('../../config/database');
 // main
 const getPosts = async (req, res) => {
-    const category = await knex.select('*').from('category').leftJoin('users', 'category.who_create_category', 'users.id');
+    const category = await knex.select('*').from('category').leftJoin('users', 'category.user_category', 'users.id');
     const posts = await knex.select('*')
         .from('posts')
         .leftJoin('users', 'posts.user_post', 'users.id')
         .leftJoin('category', 'posts.category', 'category.id_category');
     return res.render('admin/list-post', {
-        user: req.session.user,
+        user: req.session.user ? req.session.user.username : undefined,
         note: req.flash('errors_category'),
         category,
         posts,
@@ -28,12 +28,12 @@ const addNewCategory = async (req, res) => {
         return res.redirect('/admin/list-posts');
     }
     const name = req.body.nameOfNewCategory;
-    const user = req.session.idUser;
+    const user = req.session.user.idUser;
     // add
     await knex('category').insert({
         name_category: name,
         slug_category: slugify(name + String(Date.now())),
-        who_create_category: user,
+        user_category: user,
     });
     return res.redirect('/admin/list-posts');
 };
@@ -66,7 +66,7 @@ const deleteCategoty = async (req, res) => {
 const getAddPost = async (req, res) => {
     const category = await knex('category').select('*');
     return res.render('admin/add-post', {
-        user: req.session.user,
+        user: req.session.user ? req.session.user.username : undefined,
         note: undefined,
         category,
     });
@@ -85,7 +85,7 @@ const getUpdatePost = async (req, res) => {
     tags = tags.join(',');
 
     return res.render('admin/update-post', {
-        user: req.session.user,
+        user: req.session.user ? req.session.user.username : undefined,
         note: undefined,
         category,
         post,

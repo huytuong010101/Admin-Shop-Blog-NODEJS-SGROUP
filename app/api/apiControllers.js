@@ -10,7 +10,7 @@ const addPost = async (req, res) => {
         slug_post: slugify(req.body.title + String(Date.now())),
         category: Number(req.body.category),
         content: req.body.content,
-        user_post: req.session.idUser,
+        user_post: req.session.user.idUser,
     });
     // add tag
     const tags = req.body.tags.split(',');
@@ -31,10 +31,10 @@ const addPost = async (req, res) => {
 
 const updatePost = async (req, res) => {
     // check if edit own post
-    if (req.session.role === 'client') {
+    if (req.session.user.role === 'client') {
         const query = await knex('posts').first('*')
             .where('id_post', '=', req.body.id)
-            .where('user_post', '=', req.session.idUser);
+            .where('user_post', '=', req.session.user.idUser);
         if (!query) {
             return res.json({
                 result: 'NOT OK',
@@ -69,10 +69,10 @@ const updatePost = async (req, res) => {
 
 const deletePost = async (req, res) => {
     // check if edit own post
-    if (req.session.role === 'client') {
+    if (req.session.user.role === 'client') {
         const query = await knex('posts').first('*')
             .where('id_post', '=', req.body['id'])
-            .where('user_post', '=', req.session.idUser);
+            .where('user_post', '=', req.session.user.idUser);
         if (!query) {
             return res.json({
                 result: 'NOT OK',

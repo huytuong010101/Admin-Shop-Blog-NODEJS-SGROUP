@@ -10,20 +10,20 @@ const getAllProduct = async (req, res) => {
     type,
     category,
     products,
-    user: req.session['user'],
+    user: req.session.user ? req.session.user.username : undefined,
   });
 };
 
 const getMyProduct = async (req, res) => {
   const category = await knex.select('name_category', 'slug_category').from('category');
   const type = await knex.select('*').from('type');
-  const products = await knex.select('*').from('products').where('user_product', '=', Number(req.session['idUser']));
+  const products = await knex.select('*').from('products').where('user_product', '=', Number(req.session.user.idUser));
   return res.render('client/my-product', {
     note: 'Tất cả sản phẩm cuả bạn',
     type,
     category,
     products,
-    user: req.session['user'],
+    user: req.session.user ? req.session.user.username : undefined,
   });
 };
 
@@ -40,7 +40,7 @@ const getProductByCategory = async (req, res) => {
     type,
     category,
     products,
-    user: req.session['user'],
+    user: req.session.user ? req.session.user.username : undefined,
   });
 };
 
@@ -59,13 +59,13 @@ const detailProduct = async (req, res) => {
     type,
     category,
     product: product[0],
-    user: req.session['user'],
+    user: req.session.user ? req.session.user.username : undefined,
   });
 };
 
 const addNewProduct = async (req, res) => {
   const name = req.body.product_name;
-  const user = req.session.idUser;
+  const user = req.session.user.idUser;
   let path = '/images_of_products/no-img.png';
   if (req.file) {
     path = `/${req.file.destination.split('/').slice(1).join('/')}/${req.file.filename}`;
