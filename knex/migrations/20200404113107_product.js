@@ -7,7 +7,7 @@ exports.up = (knex) => knex.schema.createTable('products', (table) => {
     table.string('name_product', 500).notNullable();
     table.string('describe');
     table.integer('type').unsigned();
-    table.integer('who_create_product').unsigned();
+    table.integer('user_product').unsigned();
     table.string('image_product', 500);
     // time
     table.timestamp('created_at_product').defaultTo(knex.fn.now());
@@ -16,7 +16,7 @@ exports.up = (knex) => knex.schema.createTable('products', (table) => {
     );
     // relate
     table.foreign('type').references('id_type').inTable('type').onDelete('CASCADE');
-    table.foreign('who_create_product').references('id').inTable('users').onDelete('CASCADE');
+    table.foreign('user_product').references('id').inTable('users').onDelete('CASCADE');
 });
 
 exports.down = (knex) => knex.schema.dropTable('products');

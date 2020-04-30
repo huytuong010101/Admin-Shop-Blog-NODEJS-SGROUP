@@ -226,15 +226,15 @@
     <script src="/js/myadmin.js"></script>
     <!--Show dialog modal-->
     <script>
-        dataUser = <% -JSON.stringify(listUser) %>
-            function showModal(event) {
-                index = Number(event.getAttribute("user")) - 1
-                document.getElementsByName("id")[0].value = dataUser[index].id
-                document.getElementsByName("username")[0].value = dataUser[index].username
-                document.getElementsByName("fullname")[0].value = dataUser[index].fullname
-                document.getElementsByName("email")[0].value = dataUser[index].email
-                document.getElementsByName("password")[0].value = dataUser[index].password
-            }
+        let dataUser = <%-JSON.stringify(listUser)%>
+        function showModal(event) {
+            index = Number(event.getAttribute("user")) - 1
+            document.getElementsByName("id")[0].value = dataUser[index].id
+            document.getElementsByName("username")[0].value = dataUser[index].username
+            document.getElementsByName("fullname")[0].value = dataUser[index].fullname
+            document.getElementsByName("email")[0].value = dataUser[index].email
+            document.getElementsByName("password")[0].value = dataUser[index].password
+        }
     </script>
     <!--Show nitify-->
     <script>

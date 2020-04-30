@@ -7,10 +7,10 @@ const { knex } = require('../../config/database');
 
 // main
 const getProducts = async (req, res) => {
-    const type = await knex.select('*').from('type').leftJoin('users', 'type.who_create_type', 'users.id');
+    const type = await knex.select('*').from('type').leftJoin('users', 'type.user_product_type', 'users.id');
     const products = await knex.select('*')
         .from('products')
-        .leftJoin('users', 'products.who_create_product', 'users.id')
+        .leftJoin('users', 'products.user_product', 'users.id')
         .leftJoin('type', 'products.type', 'type.id_type');
     return res.render('admin/list-product', {
         user: req.session.user,
@@ -36,7 +36,7 @@ const addNewType = async (req, res) => {
     await knex('type').insert({
         name_type: name,
         slug_type: slugify(name + String(Date.now())),
-        who_create_type: user,
+        user_product_type: user,
     });
     return res.redirect('/admin/view/products');
 };
@@ -70,7 +70,7 @@ const addNewProduct = async (req, res) => {
         slug_product: slugify(name + String(Date.now()) + String(user)),
         describe: req.body.decribe,
         type: req.body.type_id,
-        who_create_product: user,
+        user_product: user,
         image_product: path,
     });
     return res.redirect('/admin/view/products');
@@ -85,7 +85,7 @@ const detailType = async (req, res) => {
     const type = await knex.select('name_type', 'id_type', 'created_at_type', 'updated_at_type', 'fullname')
         .from('type')
         .where('id_type', '=', req.body.id)
-        .leftJoin('users', 'type.who_create_type', 'users.id');
+        .leftJoin('users', 'type.user_product_type', 'users.id');
     const products = await knex.select('name_product')
         .from('products')
         .where('type', '=', req.body.id);
@@ -131,7 +131,7 @@ const detailProduct = async (req, res) => {
     const product = await knex.select('name_product', 'price', 'describe', 'created_at_product', 'updated_at_product', 'image_product', 'fullname', 'id_type', 'name_type')
         .from('products')
         .where('id_product', '=', req.body.id)
-        .leftJoin('users', 'products.who_create_product', 'users.id')
+        .leftJoin('users', 'products.user_product', 'users.id')
         .leftJoin('type', 'products.type', 'type.id_type');
     if (product.length === 0) {
         return res.json({

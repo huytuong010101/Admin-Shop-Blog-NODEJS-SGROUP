@@ -17,7 +17,7 @@ const getAllProduct = async (req, res) => {
 const getMyProduct = async (req, res) => {
   const category = await knex.select('name_category', 'slug_category').from('category');
   const type = await knex.select('*').from('type');
-  const products = await knex.select('*').from('products').where('who_create_product', '=', Number(req.session['idUser']));
+  const products = await knex.select('*').from('products').where('user_product', '=', Number(req.session['idUser']));
   return res.render('client/my-product', {
     note: 'Tất cả sản phẩm cuả bạn',
     type,
@@ -51,7 +51,7 @@ const detailProduct = async (req, res) => {
     .select('name_product', 'describe', 'price', 'fullname', 'image_product')
     .from('products')
     .where('slug_product', '=', req.params.slug)
-    .leftJoin('users', 'products.who_create_product', 'users.id');
+    .leftJoin('users', 'products.user_product', 'users.id');
   if (product.length === 0) {
     return res.redirect('/404');
   }
@@ -77,7 +77,7 @@ const addNewProduct = async (req, res) => {
     slug_product: slugify(name + String(Date.now()) + String(user)),
     describe: req.body.decribe,
     type: req.body.type_id,
-    who_create_product: user,
+    user_product: user,
     image_product: path,
   });
   return res.redirect('/my-product');

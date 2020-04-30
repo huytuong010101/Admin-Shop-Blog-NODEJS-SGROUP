@@ -7,7 +7,7 @@ const getPosts = async (req, res) => {
     const category = await knex.select('*').from('category').leftJoin('users', 'category.who_create_category', 'users.id');
     const posts = await knex.select('*')
         .from('posts')
-        .leftJoin('users', 'posts.who_create_post', 'users.id')
+        .leftJoin('users', 'posts.user_post', 'users.id')
         .leftJoin('category', 'posts.category', 'category.id_category');
     return res.render('admin/list-post', {
         user: req.session.user,
